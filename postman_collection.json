@@ -1,0 +1,195 @@
+{
+  "info": {
+    "name": "Library Service Requests API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "id",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 GET /health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/health"
+      }
+    },
+    {
+      "name": "2 GET all records",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/records"
+      }
+    },
+    {
+      "name": "3 POST create (saves id)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Renew my Physics textbook\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Please extend my loan by two weeks.\",\n  \"status\": \"Pending\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('id', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 GET one (that id)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/{{id}}"
+      }
+    },
+    {
+      "name": "5 PUT update (same id)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records/{{id}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Renew my Physics textbook (edited)\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Please extend my loan by two weeks.\",\n  \"status\": \"In progress\"\n}"
+        }
+      }
+    },
+    {
+      "name": "6 DELETE (same id)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/{{id}}"
+      }
+    },
+    {
+      "name": "7 GET deleted id -> 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/{{id}}"
+      }
+    },
+    {
+      "name": "8 POST missing title -> 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"category\": \"Borrowing\",\n  \"description\": \"No title here\",\n  \"status\": \"Pending\"\n}"
+        }
+      }
+    },
+    {
+      "name": "9 POST bad status -> 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Renew my Physics textbook\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Please extend my loan by two weeks.\",\n  \"status\": \"Done\"\n}"
+        }
+      }
+    },
+    {
+      "name": "10 GET invalid id abc -> 400",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/abc"
+      }
+    },
+    {
+      "name": "11 GET missing id 999999 -> 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/999999"
+      }
+    },
+    {
+      "name": "12 PUT missing id 999999 -> 404",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records/999999",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Renew my Physics textbook\",\n  \"category\": \"Borrowing\",\n  \"description\": \"Please extend my loan by two weeks.\",\n  \"status\": \"Pending\"\n}"
+        }
+      }
+    },
+    {
+      "name": "13 DELETE missing id 999999 -> 404",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{baseUrl}}/api/records/999999"
+      }
+    },
+    {
+      "name": "14 POST malformed JSON -> 400",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/records",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"title\": \"oops\""
+        }
+      }
+    }
+  ]
+}
